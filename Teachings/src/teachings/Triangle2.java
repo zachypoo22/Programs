@@ -2,7 +2,7 @@ package teachings;
 
 /**
  *
- * @author zacheriah
+ * @author Zacheriah Mell
  */
 public class Triangle2 
 {

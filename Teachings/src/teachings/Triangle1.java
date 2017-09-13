@@ -2,7 +2,7 @@ package teachings;
 
 /**
  *
- * @author zacheriah
+ * @author Zacheriah Mell
  */
 public class Triangle1 
 {
@@ -21,7 +21,7 @@ public class Triangle1
     
     private double calcArea()
     {
-        return .5 * base * height;
+        return .5 * MyMath.mul(base, height);
     }
     
     public double getArea()

@@ -3,7 +3,7 @@ package teachings;
 
 /**
  *
- * @author zacheriah
+ * @author Zacheriah Mell
  */
 public class Teachings 
 {
@@ -24,6 +24,10 @@ public class Teachings
         secondTriangle.setHeight(9);
         
         System.out.printf("First triangle height: %d\nSecond Triangle height: %d\n", firstTriangle.height, secondTriangle.getHeight());
+        
+        System.out.println("best number: " + MyMath.bestNumber);
+        System.out.println("2 to the 10th power: " + MyMath.pow(2, 10));
+        System.out.println("4 * 8 = " + MyMath.mul(4, 8));
         
     }
 
