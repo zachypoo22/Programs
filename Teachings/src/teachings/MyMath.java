@@ -6,8 +6,14 @@ package teachings;
  */
 public class MyMath 
 {
-    public static final int bestNumber = 1024;
+    public static final int bestNumber = 22;
     
+    /**
+     *
+     * @param base  
+     * @param power exponent
+     * @return result
+     */
     public static int pow(int base, int power)
     {
         if (power == 1)

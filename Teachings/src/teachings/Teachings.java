@@ -9,7 +9,7 @@ public class Teachings
 {
 
     /**
-     * @param args
+     * @param args why are you calling my main like this?
      */
     public static void main(String[] args) 
     {
@@ -27,8 +27,7 @@ public class Teachings
         
         System.out.println("best number: " + MyMath.bestNumber);
         System.out.println("2 to the 10th power: " + MyMath.pow(2, 10));
-        System.out.println("4 * 8 = " + MyMath.mul(4, 8));
-        
+        System.out.println("4 * 8 = " + MyMath.mul(4, 8));        
     }
 
 }

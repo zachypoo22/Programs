@@ -9,6 +9,11 @@ public class Triangle1
     public int base;
     public int height;
     
+    /**
+     *
+     * @param base length of base
+     * @param height length of height
+     */
     public Triangle1(int base, int height)
     {
         this.base = base;
