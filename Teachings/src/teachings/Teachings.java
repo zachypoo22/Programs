@@ -17,6 +17,7 @@ public class Teachings
         Triangle2 secondTriangle = new Triangle2(5,6); //private fields
         System.out.println("first triangle height: " + firstTriangle.height);
         System.out.println("second triangle height: " + secondTriangle.getHeight());
+        System.out.println("first triangle area: " + firstTriangle.getArea());
         
         System.out.println("setting first triangle height to 7 and second triangle height to 9");
         firstTriangle.height = 7;
