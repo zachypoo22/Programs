@@ -1,8 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package views;
 
 import javax.swing.JButton;
@@ -11,7 +7,7 @@ import javax.swing.JTextField;
 
 /**
  *
- * @author zacheriah
+ * @author zacheriah mell
  */
 public class MyFrame extends javax.swing.JFrame {
 
