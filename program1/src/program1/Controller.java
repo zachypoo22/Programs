@@ -82,11 +82,7 @@ public class Controller {
             pwStrength++;
         }
 
-        if (pwStrength >= 3) {
-            return true;
-        } else {
-            return false;
-        }
+        return pwStrength >= 3;
     }
 
     public Controller() {
