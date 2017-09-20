@@ -19,7 +19,7 @@ public class MyFrame extends javax.swing.JFrame {
         return addButton;
     }
     public JTextField getGradeText() {
-        return creditsText;
+        return gradeText;
     }
     public JTextField getClassText() {
         return classText;
