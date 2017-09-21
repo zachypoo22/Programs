@@ -14,78 +14,97 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import views.MyFrame;
 
-public class Controller {
+public class Controller
+{
 
     private final MyFrame frame = new MyFrame();
 
-    class login {
+    class login
+    {
 
         private String password;
         private String username;
 
-        public login(String username, String password) {
+        public login(String username, String password)
+        {
             this.username = username;
             this.password = password;
         }
 
-        public void setUsername(String username) {
+        public void setUsername(String username)
+        {
             this.username = username;
         }
 
-        public void setPassword(String password) {
+        public void setPassword(String password)
+        {
             this.password = password;
         }
 
-        public String getUsername() {
+        public String getUsername()
+        {
             return username;
         }
 
-        public String getPassword() {
+        public String getPassword()
+        {
             return password;
         }
     }
 
-    private boolean isValidLogin(String s) {
+    private boolean isValidLogin(String s)
+    {
         return s.matches("[a-zA-Z]{2}[0-9]{6}@wcupa.edu");
     }
 
-    private boolean isValidPassword(String s) {
+    private boolean isValidPassword(String s)
+    {
         int pwStrength = 0;
         boolean hasDigit = false;
         boolean hasUpper = false;
         boolean hasLower = false;
         boolean hasSymbol = false;
-        for (int i = 0; i < s.length(); i++) {
-            if (Character.isDigit(s.charAt(i))) {
+        for (int i = 0; i < s.length(); i++)
+        {
+            if (Character.isDigit(s.charAt(i)))
+            {
                 hasDigit = true;
             }
-            if (Character.isLowerCase(s.charAt(i))) {
+            if (Character.isLowerCase(s.charAt(i)))
+            {
                 hasLower = true;
             }
-            if (Character.isUpperCase(s.charAt(i))) {
+            if (Character.isUpperCase(s.charAt(i)))
+            {
                 hasUpper = true;
             }
-            if (!Character.isLetterOrDigit(s.charAt(i))) {
+            if (!Character.isLetterOrDigit(s.charAt(i)))
+            {
                 hasSymbol = true;
             }
         }
-        if (hasDigit) {
+        if (hasDigit)
+        {
             pwStrength++;
         }
-        if (hasUpper) {
+        if (hasUpper)
+        {
             pwStrength++;
         }
-        if (hasLower) {
+        if (hasLower)
+        {
             pwStrength++;
         }
-        if (hasSymbol) {
+        if (hasSymbol)
+        {
             pwStrength++;
         }
 
         return pwStrength >= 3;
     }
 
-    public Controller() {
+    public Controller()
+    {
         frame.setTitle("Login");
         frame.setLocationRelativeTo(null);
 
@@ -109,49 +128,73 @@ public class Controller {
         textArea.setText("");
 
         //event handlers
-        changeButton.addActionListener(new ActionListener() {
+        changeButton.addActionListener(new ActionListener()
+        {
             @Override
-            public void actionPerformed(ActionEvent ae) {
+            public void actionPerformed(ActionEvent ae)
+            {
                 boolean activeUsername = false;
-                if (isValidLogin(loginText.getText().trim())) {
+                if (isValidLogin(loginText.getText().trim()))
+                {
 
-                    for (int i = 0; i < logins.size(); i++) {
-                        if (logins.get(i).getUsername().equals(loginText.getText().trim())) {
+                    for (int i = 0; i < logins.size(); i++)
+                    {
+                        if (logins.get(i).getUsername().equals(loginText.getText().trim()))
+                        {
                             activeUsername = true;
-                            if (logins.get(i).getPassword().equals(passwordText.getText().trim())) {
-                                if (changeText.getText().trim().length() >= 8) {
-                                    if (!changeText.getText().trim().equals(passwordText.getText().trim())) {
-                                        if (isValidPassword(changeText.getText().trim())) {
+                            if (logins.get(i).getPassword().equals(passwordText.getText().trim()))
+                            {
+                                if (changeText.getText().trim().length() >= 8)
+                                {
+                                    if (!changeText.getText().trim().equals(passwordText.getText().trim()))
+                                    {
+                                        if (isValidPassword(changeText.getText().trim()))
+                                        {
                                             logins.get(i).setPassword(changeText.getText().trim());
                                             textArea.setText("Validation: OK\nNew Password: OK");
-                                        } else {
+                                        }
+                                        else
+                                        {
                                             textArea.setText("Validation: OK\n New Password: Too Weak");
                                         }
-                                    } else {
+                                    }
+                                    else
+                                    {
                                         textArea.setText("Validation: OK\nNew Password: Cannot be the current password");
                                     }
-                                } else {
+                                }
+                                else
+                                {
                                     textArea.setText("Validation: OK\nNew Password: Too short");
                                 }
 
-                            } else {
+                            }
+                            else
+                            {
                                 textArea.setText("Validation: Current password incorrect");
                             }
                         }
                     }
-                    if (!activeUsername) {
+                    if (!activeUsername)
+                    {
                         textArea.setText("Validation: No such user");
                     }
-                } else {
-                    textArea.setText("Validation: login format incorrect");
+                }
+                else
+                {
+                    textArea.setText(
+                            "Validation: login format incorrect");
                 }
 
             }
         });
-        dumpButton.addActionListener(new ActionListener() {
+        dumpButton.addActionListener(new ActionListener()
+        {
             @Override
-            public void actionPerformed(ActionEvent ae) {
-                for (int i = 0; i < logins.size(); i++) {
+            public void actionPerformed(ActionEvent ae)
+            {
+                for (int i = 0; i < logins.size(); i++)
+                {
                     System.out.printf("Username: %s Password: %s\n", logins.get(i).getUsername(), logins.get(i).getPassword());
                 }
             }
@@ -161,7 +204,8 @@ public class Controller {
     /**
      * @param args the command line arguments
      */
-    public static void main(String[] args) {
+    public static void main(String[] args)
+    {
         Controller app = new Controller();
         app.frame.setVisible(true);
     }
