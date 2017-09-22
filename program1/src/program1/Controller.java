@@ -133,24 +133,28 @@ public class Controller
             @Override
             public void actionPerformed(ActionEvent ae)
             {
+                String username = loginText.getText().trim();
+                String password = passwordText.getText().trim();
+                String change = changeText.getText().trim();
                 boolean activeUsername = false;
-                if (isValidLogin(loginText.getText().trim()))
+                
+                if (isValidLogin(username))
                 {
 
                     for (int i = 0; i < logins.size(); i++)
                     {
-                        if (logins.get(i).getUsername().equals(loginText.getText().trim()))
+                        if (logins.get(i).getUsername().equals(username))
                         {
                             activeUsername = true;
-                            if (logins.get(i).getPassword().equals(passwordText.getText().trim()))
+                            if (logins.get(i).getPassword().equals(password))
                             {
-                                if (changeText.getText().trim().length() >= 8)
+                                if (change.length() >= 8)
                                 {
-                                    if (!changeText.getText().trim().equals(passwordText.getText().trim()))
+                                    if (!change.equals(password))
                                     {
-                                        if (isValidPassword(changeText.getText().trim()))
+                                        if (isValidPassword(change))
                                         {
-                                            logins.get(i).setPassword(changeText.getText().trim());
+                                            logins.get(i).setPassword(change);
                                             textArea.setText("Validation: OK\nNew Password: OK");
                                         }
                                         else
@@ -182,8 +186,7 @@ public class Controller
                 }
                 else
                 {
-                    textArea.setText(
-                            "Validation: login format incorrect");
+                    textArea.setText("Validation: login format incorrect");
                 }
 
             }
