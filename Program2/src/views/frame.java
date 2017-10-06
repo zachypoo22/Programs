@@ -81,6 +81,8 @@ public class frame extends javax.swing.JFrame
         jPanel1.setLayout(new java.awt.BorderLayout());
         jPanel1.add(label, java.awt.BorderLayout.CENTER);
 
+        textField.setEditable(false);
+
         textArea.setColumns(20);
         textArea.setRows(5);
         jScrollPane1.setViewportView(textArea);
