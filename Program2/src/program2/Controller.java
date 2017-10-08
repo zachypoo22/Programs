@@ -23,6 +23,20 @@ public class Controller
 
     private final frame frame = new frame();
     private boolean fileLoaded = false;
+    
+    //filename check
+    public static String correctedName(String s)
+    {
+        if (s.matches(".*\\..*"))
+        {
+            return s;
+        }
+        else
+        {
+            return "" + s + ".txt";
+        }
+
+    }
 
     private static JFileChooser getFileChooser()
     {
@@ -39,6 +53,12 @@ public class Controller
         frame.setTitle("Text Editor");
         frame.setLocationRelativeTo(null);
         frame.textArea().enable(false);
+
+//        //filename tests
+//        System.out.println("text => " + correctedName("text"));
+//        System.out.println("text.txt => " + correctedName("text.txt"));
+//        System.out.println("text.src => " + correctedName("text.src"));
+//        
 
         //event handlers
         frame.newItem().addActionListener(new ActionListener()
@@ -62,9 +82,9 @@ public class Controller
                 {
                     return;
                 }
-                
+
                 frame.textArea().enable(true);
-                
+
                 File file = chooser.getSelectedFile();
                 Path path = file.toPath();
 
