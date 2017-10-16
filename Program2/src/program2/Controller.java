@@ -23,6 +23,7 @@ public class Controller
 
     private final frame frame = new frame();
     private boolean fileLoaded = false;
+    private boolean fileExists = false;
     
     //filename check
     public static String correctedName(String s)
@@ -99,12 +100,14 @@ public class Controller
                     frame.textField().setText("" + relative);
 
                     fileLoaded = true;
+                    fileExists = true;
 
                 }
                 catch (IOException e)
                 {
                     JOptionPane.showMessageDialog(frame, "cant open this file");
                 }
+                
             }
         });
         frame.saveAsItem().addActionListener(new ActionListener()
@@ -148,12 +151,21 @@ public class Controller
                 try
                 {
                     Path working = Paths.get(System.getProperty("user.dir"));
-                    File file = new File(frame.textField().getText());
+
+                    File file = new File(working.toString(), frame.textField().getText());
+                    System.out.println(frame.textField().getText());
+
+
                     Path path = file.toPath();
+
                     Path relative = working.relativize(path);
 
                     String content = frame.textArea().getText();
+                    
+                    Files.deleteIfExists(path);
                     Files.write(path, content.getBytes());
+                    
+                    fileExists = true;
                 }
                 catch (IOException e)
                 {
@@ -174,7 +186,14 @@ public class Controller
                 else
                 {
                     frame.saveAsItem().setEnabled(true);
-                    frame.saveItem().setEnabled(true);
+                    if(fileExists)
+                    {
+                        frame.saveItem().setEnabled(true);
+                    }
+                    else
+                    {
+                        frame.saveItem().setEnabled(false);
+                    }
                 }
             }
 
