@@ -6,7 +6,8 @@ setup(
     packages=[''],
     url='',
     license='',
-    author='zachm',
+    author='Zacheriah Mell',
     author_email='',
-    description=''
+    description='',
+    install_requires=['PyQt5']
 )
