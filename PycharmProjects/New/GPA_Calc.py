@@ -68,7 +68,7 @@ class Window(QWidget):
         self.updateText()
 
         #test code
-        # self.insertDB(('CS3', 3, 99.0))
+
 
 
     def add(self):
@@ -80,8 +80,6 @@ class Window(QWidget):
         self.updateText()
 
     def delete(self):
-        # conn = sqlite3.connect('classes.db')
-        # c = conn.cursor()
         dname, entered = QInputDialog.getText(self, "Delete Class", "Class Name:")
 
         if not entered:
@@ -95,7 +93,62 @@ class Window(QWidget):
         self.updateText()
 
     def calcGPA(self):
+
         self.gpa = 0
+
+        conn = sqlite3.connect('classes.db')
+        c = conn.cursor()
+
+        c.execute('''SELECT * FROM classes''')
+        clist = c.fetchall()
+        creditsList = []
+        gradesList = []
+        print(clist)
+
+        for item in clist:
+            creditsList.append(item[1])
+
+        for item in clist:
+            gradesList.append(item[2])
+
+        print('credits', creditsList)
+        print('grades', gradesList)
+
+        def sumCredits():
+            creds = 0
+            for i in creditsList:
+                creds += i
+
+            print('creds', creds)
+            return creds
+
+
+        def sumGradePoints():
+            points = 0
+
+            def gradeToPoints(x):
+                if x >= 90:
+                    return 4
+                elif x >= 80:
+                    return 3
+                elif x >= 70:
+                    return 2
+                elif x>= 60:
+                    return 1
+                else:
+                    return 0
+
+            for i in gradesList:
+                points += gradeToPoints(i)
+
+            print('points', points)
+            return
+
+
+
+        self.gpa = sumGradePoints() / sumCredits()
+
+
 
     def updateText(self):
         conn = sqlite3.connect('classes.db')
@@ -108,16 +161,16 @@ class Window(QWidget):
         for item in clist:
             self.textArea.append("{}\t{}\n--------\t--------".format(item[0], item[2]))
 
+        conn.close()
+
 
     def insertDB(self, tup):
         conn = sqlite3.connect('classes.db')
         c = conn.cursor()
-        print(tup)
-        print('executing')
-        print('''INSERT INTO classes VALUES ('{}', {}, {})'''.format(tup[0], tup[1], tup[2]))
         c.execute('''INSERT INTO classes VALUES ('{}', {}, {})'''.format(tup[0], tup[1], tup[2]))
-        print('commiting')
+
         conn.commit()
+        conn.close()
 
     def delDB(self, classname):
         conn = sqlite3.connect('classes.db')
@@ -125,6 +178,7 @@ class Window(QWidget):
         print(classname)
         c.execute('''DELETE FROM classes WHERE cname = '{}' '''.format(classname))
         conn.commit()
+        conn.close()
 
 
 
