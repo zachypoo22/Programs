@@ -103,7 +103,6 @@ class Window(QWidget):
         clist = c.fetchall()
         creditsList = []
         gradesList = []
-        print(clist)
 
         for item in clist:
             creditsList.append(item[1])
@@ -111,15 +110,11 @@ class Window(QWidget):
         for item in clist:
             gradesList.append(item[2])
 
-        print('credits', creditsList)
-        print('grades', gradesList)
-
         def sumCredits():
             creds = 0
             for i in creditsList:
                 creds += i
 
-            print('creds', creds)
             return creds
 
 
@@ -139,14 +134,18 @@ class Window(QWidget):
                     return 0
 
             for i in gradesList:
-                points += gradeToPoints(i)
+                j = 0
+                gpoints = gradeToPoints(i)
+                points += gpoints * creditsList[j]
+                j += 1
 
-            print('points', points)
-            return
+            return points
 
 
-
-        self.gpa = sumGradePoints() / sumCredits()
+        if creditsList != []:
+            self.gpa = sumGradePoints() / sumCredits()
+        else:
+            self.gpa = 0
 
 
 
@@ -175,7 +174,6 @@ class Window(QWidget):
     def delDB(self, classname):
         conn = sqlite3.connect('classes.db')
         c = conn.cursor()
-        print(classname)
         c.execute('''DELETE FROM classes WHERE cname = '{}' '''.format(classname))
         conn.commit()
         conn.close()
