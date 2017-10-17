@@ -3,6 +3,13 @@ import sqlite3
 from PyQt5.QtWidgets import QApplication, QWidget, QVBoxLayout, QLineEdit,\
     QTextEdit, QPushButton, QLabel, QHBoxLayout, QInputDialog
 
+
+#setup DataBase
+conn = sqlite3.connect('classes.db')
+c = conn.cursor()
+c.execute('''CREATE TABLE IF NOT EXISTS  classes (cname text, credits integer, grade real  )''')
+
+
 class Window(QWidget):
 
     def __init__(self):
@@ -55,7 +62,6 @@ class Window(QWidget):
     def main(self):
         self.addButton.clicked.connect(self.add)
         self.deleteButton.clicked.connect(self.delete)
-        self.setupDB()
 
         #init text area
         self.calcGPA()
@@ -64,8 +70,6 @@ class Window(QWidget):
         #test code
         # self.insertDB(('CS3', 3, 99.0))
 
-        #close connection
-        self.conn.close()
 
     def add(self):
         cTup = (self.classText.text(), int(self.creditsText.text()), float(self.gradeText.text()))
@@ -76,6 +80,8 @@ class Window(QWidget):
         self.updateText()
 
     def delete(self):
+        # conn = sqlite3.connect('classes.db')
+        # c = conn.cursor()
         dname, entered = QInputDialog.getText(self, "Delete Class", "Class Name:")
 
         if not entered:
@@ -92,35 +98,38 @@ class Window(QWidget):
         self.gpa = 0
 
     def updateText(self):
+        conn = sqlite3.connect('classes.db')
+        c = conn.cursor()
         self.textArea.setText('GPA : {} \nclass \tgrade\n========\t========'.format(self.gpa))
 
-        self.c.execute('''SELECT * FROM classes''')
-        clist = self.c.fetchall()
+        c.execute('''SELECT * FROM classes''')
+        clist = c.fetchall()
 
         for item in clist:
             self.textArea.append("{}\t{}\n--------\t--------".format(item[0], item[2]))
 
-    def setupDB(self):
-        self.conn = sqlite3.connect('classes.db')
-        self.c = self.conn.cursor()
-
-        self.c.execute('''CREATE TABLE IF NOT EXISTS  classes (cname text, credits integer, grade real  )''')
 
     def insertDB(self, tup):
+        conn = sqlite3.connect('classes.db')
+        c = conn.cursor()
         print(tup)
         print('executing')
         print('''INSERT INTO classes VALUES ('{}', {}, {})'''.format(tup[0], tup[1], tup[2]))
-        self.c.execute('''INSERT INTO classes VALUES ('{}', {}, {})'''.format(tup[0], tup[1], tup[2]))
+        c.execute('''INSERT INTO classes VALUES ('{}', {}, {})'''.format(tup[0], tup[1], tup[2]))
         print('commiting')
-        self.conn.commit()
+        conn.commit()
 
     def delDB(self, classname):
+        conn = sqlite3.connect('classes.db')
+        c = conn.cursor()
         print(classname)
-        self.c.execute('''DELETE FROM classes WHERE cname = '{}' '''.format(classname))
-        self.conn.commit()
+        c.execute('''DELETE FROM classes WHERE cname = '{}' '''.format(classname))
+        conn.commit()
 
 
 
 app = QApplication(sys.argv)
 window = Window()
+# close connection
+conn.close()
 sys.exit(app.exec_())
