@@ -122,14 +122,28 @@ class Window(QWidget):
             points = 0
 
             def gradeToPoints(x):
-                if x >= 90:
+                if x >= 93:
                     return 4
-                elif x >= 80:
+                elif x >= 90:
+                    return 3.67
+                elif x >= 87:
+                    return 3.33
+                elif x >= 83:
                     return 3
-                elif x >= 70:
+                elif x >= 80:
+                    return 2.67
+                elif x >= 77:
+                    return 2.33
+                elif x >= 73:
                     return 2
-                elif x>= 60:
+                elif x >= 70:
+                    return 1.67
+                elif x >= 67:
+                    return 1.33
+                elif x >= 63:
                     return 1
+                elif x >= 60:
+                    return 0.67
                 else:
                     return 0
 
