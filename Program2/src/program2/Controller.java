@@ -19,6 +19,9 @@ import views.frame;
 /**
  *
  * @author Zacheriah Mell
+ * @ProgramName program2
+ * @Purpose: Allows a user to create or open existing text files, edit them and
+ * save changes.
  */
 public class Controller
 {
@@ -166,7 +169,7 @@ public class Controller
                 {
                     return;
                 }
-                
+
                 Path working = Paths.get(System.getProperty("user.dir"));
                 File file1 = chooser.getSelectedFile();
                 if (file1.exists())
@@ -179,7 +182,7 @@ public class Controller
                 }
                 File file = new File("" + working + "/" + correctedName(file1.getName()));
                 Path path = file.toPath();
-                
+
                 try
                 {
 
