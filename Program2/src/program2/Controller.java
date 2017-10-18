@@ -2,6 +2,8 @@ package program2;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -24,7 +26,8 @@ public class Controller
     private final frame frame = new frame();
     private boolean fileLoaded = false;
     private boolean fileExists = false;
-    
+    private boolean fileModified = false;
+
     //filename check
     public static String correctedName(String s)
     {
@@ -60,13 +63,43 @@ public class Controller
 //        System.out.println("text.txt => " + correctedName("text.txt"));
 //        System.out.println("text.src => " + correctedName("text.src"));
 //        
-
         //event handlers
+        frame.textArea().addKeyListener(new KeyListener()
+        {
+            @Override
+            public void keyTyped(KeyEvent ke)
+            {
+                frame.label().setText("*");
+                fileModified = true;
+            }
+
+            @Override
+            public void keyPressed(KeyEvent ke)
+            {
+                //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            }
+
+            @Override
+            public void keyReleased(KeyEvent ke)
+            {
+                //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            }
+        });
+
         frame.newItem().addActionListener(new ActionListener()
         {
             @Override
             public void actionPerformed(ActionEvent ae)
             {
+                if (fileModified)
+                {
+                    int reply = JOptionPane.showConfirmDialog(frame, "do you want to discard your changes?", "Changes May be Lost", JOptionPane.YES_NO_OPTION);
+                    if (reply == JOptionPane.NO_OPTION)
+                    {
+                        return;
+                    }
+                }
+
                 frame.textArea().enable(true);
                 frame.label().setText("*");
                 fileLoaded = true;
@@ -77,6 +110,15 @@ public class Controller
             @Override
             public void actionPerformed(ActionEvent ae)
             {
+                if (fileModified)
+                {
+                    int reply = JOptionPane.showConfirmDialog(frame, "do you want to discard your changes?", "Changes May be Lost", JOptionPane.YES_NO_OPTION);
+                    if (reply == JOptionPane.NO_OPTION)
+                    {
+                        return;
+                    }
+                }
+
                 JFileChooser chooser = Controller.getFileChooser();
                 int status = chooser.showOpenDialog(frame);
                 if (status != JFileChooser.APPROVE_OPTION)
@@ -107,7 +149,10 @@ public class Controller
                 {
                     JOptionPane.showMessageDialog(frame, "cant open this file");
                 }
-                
+
+                frame.label().setText("");
+                fileModified = false;
+
             }
         });
         frame.saveAsItem().addActionListener(new ActionListener()
@@ -121,13 +166,23 @@ public class Controller
                 {
                     return;
                 }
-
-                File file = chooser.getSelectedFile();
+                
+                Path working = Paths.get(System.getProperty("user.dir"));
+                File file1 = chooser.getSelectedFile();
+                if (file1.exists())
+                {
+                    int reply = JOptionPane.showConfirmDialog(frame, "do you want to overwrite the existing file?", "File already exists", JOptionPane.YES_NO_OPTION);
+                    if (reply == JOptionPane.NO_OPTION)
+                    {
+                        return;
+                    }
+                }
+                File file = new File("" + working + "/" + correctedName(file1.getName()));
                 Path path = file.toPath();
-
+                
                 try
                 {
-                    Path working = Paths.get(System.getProperty("user.dir"));
+
                     Path relative = working.relativize(path);
 
                     String content = frame.textArea().getText();
@@ -140,6 +195,9 @@ public class Controller
                 {
                     JOptionPane.showMessageDialog(frame, "Cannot open file");
                 }
+
+                frame.label().setText("");
+                fileModified = false;
             }
         });
         frame.saveItem().addActionListener(new ActionListener()
@@ -155,22 +213,24 @@ public class Controller
                     File file = new File(working.toString(), frame.textField().getText());
                     System.out.println(frame.textField().getText());
 
-
                     Path path = file.toPath();
 
                     Path relative = working.relativize(path);
 
                     String content = frame.textArea().getText();
-                    
+
                     Files.deleteIfExists(path);
                     Files.write(path, content.getBytes());
-                    
+
                     fileExists = true;
                 }
                 catch (IOException e)
                 {
                     JOptionPane.showMessageDialog(frame, "Can't save file");
                 }
+
+                frame.label().setText("");
+                fileModified = false;
             }
         });
         frame.fileMenu().addMenuListener(new MenuListener()
@@ -186,7 +246,7 @@ public class Controller
                 else
                 {
                     frame.saveAsItem().setEnabled(true);
-                    if(fileExists)
+                    if (fileExists)
                     {
                         frame.saveItem().setEnabled(true);
                     }
