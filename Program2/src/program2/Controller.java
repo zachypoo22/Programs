@@ -107,7 +107,7 @@ public class Controller
                         return;
                     }
                 }
-                frame.textField().setText("");
+                frame.textField().setText("<NEW FILE>");
                 fileExists = false;
                 frame.textArea().setText("");
                 frame.textArea().enable(true);
