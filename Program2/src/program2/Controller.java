@@ -107,7 +107,7 @@ public class Controller
                         return;
                     }
                 }
-                
+                frame.textField().setText("");
                 fileExists = false;
                 frame.textArea().setText("");
                 frame.textArea().enable(true);
@@ -199,7 +199,7 @@ public class Controller
                     String content = frame.textArea().getText();
                     Files.write(path, content.getBytes());
 
-                    frame.textField().setText("" + relative);
+                    frame.textField().setText(correctedName("" + relative));
 
                     String fname = file1.getName();
 //                    file1.renameTo(new File(correctedName(fname)));
@@ -210,7 +210,7 @@ public class Controller
                 {
                     JOptionPane.showMessageDialog(frame, "Cannot open file");
                 }
-
+                
                 frame.label().setText("");
                 fileModified = false;
                 fileExists = true;
