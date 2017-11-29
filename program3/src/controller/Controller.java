@@ -8,15 +8,27 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.DefaultListModel;
+import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
 import javax.swing.ListSelectionModel;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import views.AddRectDialog;
 import views.AddCircDialog;
 import views.Canvas;
@@ -42,6 +54,29 @@ private final DefaultListModel listModel = new DefaultListModel();
 // dialogs
 private AddRectDialog addRectDialog = new AddRectDialog(frame, true);
 private AddCircDialog addCircDialog = new AddCircDialog(frame, true);
+
+public static String correctedName(String s)
+{
+    if (s.matches(".*\\..*"))
+    {
+        return s;
+    }
+    else
+    {
+        return "" + s + ".fig";
+    }
+
+}
+
+private static JFileChooser getFileChooser()
+{
+    JFileChooser chooser = new JFileChooser();
+
+    chooser.setCurrentDirectory(new File(System.getProperty("user.dir")));
+    chooser.addChoosableFileFilter(new FileNameExtensionFilter("Editable Files", "fig"));
+    chooser.setAcceptAllFileFilterUsed(false);
+    return chooser;
+}
 
 public Controller()
 {
@@ -122,7 +157,7 @@ public Controller()
     @Override
     public void actionPerformed(ActionEvent e)
     {
-        if (selectedFigure == null)
+        if (Canvas.getTopFigure() == null)
         {
             return;
         }
@@ -269,9 +304,93 @@ public Controller()
         addCircDialog.setVisible(true);
     }
     });
-    
-        Helpers.addEventHandlers(addCircDialog, figureList, listModel, frame, canvas);
 
+    Helpers.addEventHandlers(addCircDialog, figureList, listModel, frame, canvas);
+
+    frame.getSave().addActionListener(new ActionListener()
+    {
+    @Override
+    public void actionPerformed(ActionEvent e)
+    {
+        if (figureList.size() <= 0)
+        {
+            JOptionPane.showMessageDialog(null, "You can't save an empty list");
+            return;
+        }
+
+        try
+        {
+            JFileChooser chooser = Controller.getFileChooser();
+            int status = chooser.showSaveDialog(frame);
+            if (status != JFileChooser.APPROVE_OPTION)
+            {
+                return;
+            }
+
+            File file0 = chooser.getSelectedFile();
+            File file = new File(correctedName("" + file0.toPath()));
+
+            FileOutputStream fos = new FileOutputStream(file);
+            ObjectOutputStream oos = new ObjectOutputStream(fos);
+
+            oos.writeObject(figureList);
+
+        }
+        catch (IOException ex)
+        {
+            JOptionPane.showMessageDialog(null, "File Error");
+        }
+
+    }
+    });
+
+    frame.getLoad().addActionListener(new ActionListener()
+    {
+    @Override
+    public void actionPerformed(ActionEvent e)
+    {
+
+        JFileChooser chooser = Controller.getFileChooser();
+        int status = chooser.showSaveDialog(frame);
+        if (status != JFileChooser.APPROVE_OPTION)
+        {
+            return;
+        }
+
+        File file = chooser.getSelectedFile();
+
+        try
+        {
+            FileInputStream fos = new FileInputStream(file);
+            ObjectInputStream oos = new ObjectInputStream(fos);
+
+            List<Figure> fileList = (List<Figure>) oos.readObject();
+
+            for (Figure f : fileList)
+            {
+                figureList.add(f);
+                listModel.addElement(f);
+            }
+
+            canvas.repaint();
+
+            if (Canvas.getTopFigure() != null)
+            {
+                frame.getScaleSpinner().setValue(Canvas.getTopFigure().getScale());
+            }
+
+            //Canvas.getTopFigure();
+        }
+        catch (IOException ex)
+        {
+            JOptionPane.showMessageDialog(null, "File Error");
+        }
+        catch (ClassNotFoundException ex)
+        {
+            JOptionPane.showMessageDialog(null, "Class Error");
+        }
+    }
+    });
 }
 
 public static void main(String[] args)

@@ -35,6 +35,14 @@ public class FigureFrame extends javax.swing.JFrame {
   {
       return addCircleItem;
   }
+  public JMenuItem getLoad()
+  {
+      return loadItem;
+  }
+  public JMenuItem getSave()
+  {
+      return saveItem;
+  }
 
   /**
    * Creates new form FigureFrame
@@ -67,6 +75,8 @@ public class FigureFrame extends javax.swing.JFrame {
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         loadSamples = new javax.swing.JMenuItem();
+        saveItem = new javax.swing.JMenuItem();
+        loadItem = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
         addRectDialog = new javax.swing.JMenuItem();
         addCircleItem = new javax.swing.JMenuItem();
@@ -131,6 +141,12 @@ public class FigureFrame extends javax.swing.JFrame {
         loadSamples.setText("Load Samples");
         jMenu1.add(loadSamples);
 
+        saveItem.setText("Save to File");
+        jMenu1.add(saveItem);
+
+        loadItem.setText("Load From File");
+        jMenu1.add(loadItem);
+
         jMenuBar1.add(jMenu1);
 
         jMenu2.setText("Figures");
@@ -171,9 +187,11 @@ public class FigureFrame extends javax.swing.JFrame {
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JScrollPane listPane;
+    private javax.swing.JMenuItem loadItem;
     private javax.swing.JMenuItem loadSamples;
     private javax.swing.JButton moveBtn;
     private javax.swing.JButton removeBtn;
+    private javax.swing.JMenuItem saveItem;
     private javax.swing.JSpinner scale;
     private javax.swing.JPanel scalePanel;
     // End of variables declaration//GEN-END:variables
