@@ -175,10 +175,12 @@ public Controller()
         {
             listModel.addElement(figure);
         }
-        
+
         canvas.repaint();
         Canvas.updateTop();
-        
+
+        //reset selected figure
+        selectedFigure = null;
         //fix the spinner
 //        System.out.println(Canvas.getTopFigure());
 //        System.out.println(Canvas.getTopFigure().getScale());
@@ -191,6 +193,7 @@ public Controller()
     @Override
     public void mousePressed(MouseEvent e)
     {
+        Canvas.updateTop();
 
         if (Canvas.getTopFigure() == null)
         {
@@ -212,6 +215,7 @@ public Controller()
 
     public void mouseReleased(MouseEvent e)
     {
+        Canvas.updateTop();
         selectedFigure = null;
     }
     });
@@ -248,17 +252,32 @@ public Controller()
         List<Figure> samples = Helpers.getSampleFigureList();
         figureList.clear();
 
-        for (Figure sample : samples)
-        {
-            figureList.add(sample);
-        }
-
         listModel.removeAllElements();
         for (Figure figure : figureList)
         {
             listModel.addElement(figure);
         }
         canvas.repaint();
+        Canvas.updateTop();
+        if (Canvas.getTopFigure() != null)
+        {
+            frame.getScaleSpinner().setValue(Canvas.getTopFigure().getScale());
+        }
+
+        for (Figure sample : samples)
+        {
+            figureList.add(sample);
+        }
+        Canvas.updateTop();
+        if (Canvas.getTopFigure() != null)
+        {
+            frame.getScaleSpinner().setValue(Canvas.getTopFigure().getScale());
+        }
+
+        for (Figure sample : samples)
+        {
+            figureList.add(sample);
+        }
     }
     });
 
@@ -372,6 +391,9 @@ public Controller()
 
             List<Figure> fileList = (List<Figure>) oos.readObject();
 
+            figureList.clear();
+            listModel.clear();
+
             for (Figure f : fileList)
             {
                 figureList.add(f);
@@ -379,13 +401,13 @@ public Controller()
             }
 
             canvas.repaint();
+            Canvas.updateTop();
 
             if (Canvas.getTopFigure() != null)
             {
                 frame.getScaleSpinner().setValue(Canvas.getTopFigure().getScale());
             }
 
-            //Canvas.getTopFigure();
         }
         catch (IOException ex)
         {
