@@ -33,10 +33,10 @@ public static void updateTop()
         topFigure = figures.get(0);
     }
 
-    if (figures == null)
+    else
     {
         //System.out.println("null figure");
-        return;
+        topFigure = null;
     }
 }
 
@@ -44,6 +44,8 @@ public static void updateTop()
 public void paintComponent(Graphics g)
 {
     super.paintComponent(g);
+    
+    updateTop();
 
     Graphics2D g2 = (Graphics2D) g;
 

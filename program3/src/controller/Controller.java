@@ -138,13 +138,13 @@ public Controller()
         {
             listModel.addElement(figure);
         }
-        frame.repaint();
+        canvas.repaint();
         Canvas.updateTop();
 
         //fix the spinner
         if (Canvas.getTopFigure() == null)
         {
-            frame.getScaleSpinner().setValue(1);
+            frame.getScaleSpinner().setValue(1.0);
         }
         else
         {
@@ -158,7 +158,7 @@ public Controller()
     @Override
     public void actionPerformed(ActionEvent e)
     {
-        if (Canvas.getTopFigure() == null)
+        if (highlightedFigure == null)
         {
             return;
         }
