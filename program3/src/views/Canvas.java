@@ -12,7 +12,7 @@ import java.util.List;
 public class Canvas extends JTextArea
 {
 
-private List<Figure> figures = null;
+private static List<Figure> figures = null;
 private static Figure topFigure;
 
 public static Figure getTopFigure()
@@ -25,19 +25,25 @@ public void setFigures(List<Figure> figures)
     this.figures = figures;
 }
 
-@Override
-public void paintComponent(Graphics g)
+public static void updateTop()
 {
-    super.paintComponent(g);
     if (figures.size() > 0)
     {
+        //System.out.println(figures.get(0));
         topFigure = figures.get(0);
     }
 
     if (figures == null)
     {
+        //System.out.println("null figure");
         return;
     }
+}
+
+@Override
+public void paintComponent(Graphics g)
+{
+    super.paintComponent(g);
 
     Graphics2D g2 = (Graphics2D) g;
 
@@ -58,6 +64,18 @@ public void paintComponent(Graphics g)
         g2.scale(scale, scale);
         figure.draw(g2);
         g2.setTransform(t); // restore each after drawing
+
+    }
+    if (figures.size() > 0)
+    {
+        //System.out.println(figures.get(0));
+        topFigure = figures.get(0);
+    }
+
+    if (figures == null)
+    {
+        //System.out.println("null figure");
+        return;
     }
 }
 }

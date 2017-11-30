@@ -126,7 +126,7 @@ public Controller()
     @Override
     public void actionPerformed(ActionEvent e)
     {
-        if (selectedFigure == null)
+        if (highlightedFigure == null)
         {
             return;
         }
@@ -139,6 +139,7 @@ public Controller()
             listModel.addElement(figure);
         }
         frame.repaint();
+        Canvas.updateTop();
 
         //fix the spinner
         if (Canvas.getTopFigure() == null)
@@ -174,8 +175,13 @@ public Controller()
         {
             listModel.addElement(figure);
         }
-
+        
+        canvas.repaint();
+        Canvas.updateTop();
+        
         //fix the spinner
+//        System.out.println(Canvas.getTopFigure());
+//        System.out.println(Canvas.getTopFigure().getScale());
         frame.getScaleSpinner().setValue(Canvas.getTopFigure().getScale());
     }
     });
