@@ -37,393 +37,405 @@ import views.FigureFrame;
 public class Controller
 {
 
-Figure selectedFigure = null;
+    Figure selectedFigure = null;
 
-private int lastX, lastY;
-private Figure highlightedFigure;
+    private int lastX, lastY;
+    private Figure highlightedFigure;
 
-private final FigureFrame frame = new FigureFrame();
-private final Canvas canvas = frame.getCanvas();
+    private final FigureFrame frame = new FigureFrame();
+    private final Canvas canvas = frame.getCanvas();
 
 // figures which appear in canvas and in list
-private final List<Figure> figureList = new ArrayList<>();
+    private final List<Figure> figureList = new ArrayList<>();
 
 // model for Figure selection list
-private final DefaultListModel listModel = new DefaultListModel();
+    private final DefaultListModel listModel = new DefaultListModel();
 
 // dialogs
-private AddRectDialog addRectDialog = new AddRectDialog(frame, true);
-private AddCircDialog addCircDialog = new AddCircDialog(frame, true);
+    private AddRectDialog addRectDialog = new AddRectDialog(frame, true);
+    private AddCircDialog addCircDialog = new AddCircDialog(frame, true);
 
-public static String correctedName(String s)
-{
-    if (s.matches(".*\\..*"))
+    public static String correctedName(String s)
     {
-        return s;
-    }
-    else
-    {
-        return "" + s + ".fig";
-    }
-
-}
-
-private static JFileChooser getFileChooser()
-{
-    JFileChooser chooser = new JFileChooser();
-
-    chooser.setCurrentDirectory(new File(System.getProperty("user.dir")));
-    chooser.addChoosableFileFilter(new FileNameExtensionFilter("Editable Files", "fig"));
-    chooser.setAcceptAllFileFilterUsed(false);
-    return chooser;
-}
-
-public Controller()
-{
-    frame.setTitle("Figures");
-    frame.setLocationRelativeTo(null);
-    frame.setSize(800, 500);
-
-    canvas.setFigures(figureList);
-
-    frame.getFigureList().setModel(listModel);
-
-    // keep figureList from taking too much vertical space
-    frame.getFigureList().getParent().setPreferredSize(new Dimension(0, 0));
-
-    // permit only single element selection
-    frame.getFigureList().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-
-    // set the spinner model
-    frame.getScaleSpinner().setModel(new SpinnerNumberModel(1.0, 0.1, 5.0, 0.05));
-
-    frame.getFigureList().addListSelectionListener(new ListSelectionListener()
-    {
-    @Override
-    public void valueChanged(ListSelectionEvent e)
-    {
-        highlightedFigure = (Figure) frame.getFigureList().getSelectedValue();
-    }
-    });
-
-    frame.getScaleSpinner().addChangeListener(new ChangeListener()
-    {
-    @Override
-    public void stateChanged(ChangeEvent e)
-    {
-        if (Canvas.getTopFigure() == null)
+        if (s.matches(".*\\..*"))
         {
-            return;
-        }
-        double d = (Double) frame.getScaleSpinner().getValue();
-        Canvas.getTopFigure().setScale(d);
-        canvas.repaint();
-    }
-    });
-
-    frame.getRemoveBtn().addActionListener(new ActionListener()
-    {
-    @Override
-    public void actionPerformed(ActionEvent e)
-    {
-        if (highlightedFigure == null)
-        {
-            return;
-        }
-
-        figureList.remove(highlightedFigure);
-
-        listModel.removeAllElements();
-        for (Figure figure : figureList)
-        {
-            listModel.addElement(figure);
-        }
-        canvas.repaint();
-        Canvas.updateTop();
-
-        //fix the spinner
-        if (Canvas.getTopFigure() == null)
-        {
-            frame.getScaleSpinner().setValue(1.0);
+            return s;
         }
         else
         {
-            frame.getScaleSpinner().setValue(Canvas.getTopFigure().getScale());
+            return "" + s + ".fig";
         }
+
     }
-    });
 
-    frame.getMoveBtn().addActionListener(new ActionListener()
+    private static JFileChooser getFileChooser()
     {
-    @Override
-    public void actionPerformed(ActionEvent e)
+        JFileChooser chooser = new JFileChooser();
+
+        chooser.setCurrentDirectory(new File(System.getProperty("user.dir")));
+        chooser.addChoosableFileFilter(new FileNameExtensionFilter("Editable Files", "fig"));
+        chooser.setAcceptAllFileFilterUsed(false);
+        return chooser;
+    }
+
+    public Controller()
     {
-        if (highlightedFigure == null)
+        frame.setTitle("Figures");
+        frame.setLocationRelativeTo(null);
+        frame.setSize(800, 500);
+
+        canvas.setFigures(figureList);
+
+        frame.getFigureList().setModel(listModel);
+
+        // keep figureList from taking too much vertical space
+        frame.getFigureList().getParent().setPreferredSize(new Dimension(0, 0));
+
+        // permit only single element selection
+        frame.getFigureList().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+
+        // set the spinner model
+        frame.getScaleSpinner().setModel(new SpinnerNumberModel(1.0, 0.1, 5.0, 0.05));
+
+        frame.getFigureList().addListSelectionListener(new ListSelectionListener()
         {
-            return;
-        }
+            @Override
+            public void valueChanged(ListSelectionEvent e)
+            {
+                highlightedFigure = (Figure) frame.getFigureList().getSelectedValue();
+            }
+        });
 
-        //change the actual list
-        selectedFigure = highlightedFigure;
-        Figure tempFigure = highlightedFigure;
-        figureList.remove(highlightedFigure);
-        figureList.add(0, tempFigure);
-
-        //redo the displayed list
-        listModel.removeAllElements();
-        for (Figure figure : figureList)
+        frame.getScaleSpinner().addChangeListener(new ChangeListener()
         {
-            listModel.addElement(figure);
-        }
+            @Override
+            public void stateChanged(ChangeEvent e)
+            {
+                if (Canvas.getTopFigure() == null)
+                {
+                    return;
+                }
+                double d = (Double) frame.getScaleSpinner().getValue();
+                Canvas.getTopFigure().setScale(d);
+                canvas.repaint();
+            }
+        });
 
-        canvas.repaint();
-        Canvas.updateTop();
+        frame.getRemoveBtn().addActionListener(new ActionListener()
+        {
+            @Override
+            public void actionPerformed(ActionEvent e)
+            {
+                if (highlightedFigure == null)
+                {
+                    return;
+                }
 
-        //reset selected figure
-        selectedFigure = null;
-        //fix the spinner
+                figureList.remove(highlightedFigure);
+
+                listModel.removeAllElements();
+                for (Figure figure : figureList)
+                {
+                    listModel.addElement(figure);
+                }
+                canvas.repaint();
+                Canvas.updateTop();
+
+                //fix the spinner
+                if (Canvas.getTopFigure() == null)
+                {
+                    frame.getScaleSpinner().setValue(1.0);
+                }
+                else
+                {
+                    frame.getScaleSpinner().setValue(Canvas.getTopFigure().getScale());
+                }
+            }
+        });
+
+        frame.getMoveBtn().addActionListener(new ActionListener()
+        {
+            @Override
+            public void actionPerformed(ActionEvent e)
+            {
+                if (highlightedFigure == null)
+                {
+                    return;
+                }
+
+                //change the actual list
+                selectedFigure = highlightedFigure;
+                Figure tempFigure = highlightedFigure;
+                figureList.remove(highlightedFigure);
+                figureList.add(0, tempFigure);
+
+                //redo the displayed list
+                listModel.removeAllElements();
+                for (Figure figure : figureList)
+                {
+                    listModel.addElement(figure);
+                }
+
+                canvas.repaint();
+                Canvas.updateTop();
+
+                //reset selected figure
+                selectedFigure = null;
+                //fix the spinner
 //        System.out.println(Canvas.getTopFigure());
 //        System.out.println(Canvas.getTopFigure().getScale());
-        frame.getScaleSpinner().setValue(Canvas.getTopFigure().getScale());
-    }
-    });
-
-    canvas.addMouseListener(new MouseAdapter()
-    {
-    @Override
-    public void mousePressed(MouseEvent e)
-    {
-        Canvas.updateTop();
-
-        if (Canvas.getTopFigure() == null)
-        {
-            return;
-        }
-
-        int mouseX = e.getX();
-        int mouseY = e.getY();
-
-        if (Canvas.getTopFigure().getPositionShape().contains(mouseX, mouseY))
-        {
-            selectedFigure = Canvas.getTopFigure();
-        }
-
-        lastX = mouseX;
-        lastY = mouseY;
-
-    }
-
-    public void mouseReleased(MouseEvent e)
-    {
-        Canvas.updateTop();
-        selectedFigure = null;
-    }
-    });
-
-    canvas.addMouseMotionListener(new MouseMotionAdapter()
-    {
-    @Override
-    public void mouseDragged(MouseEvent e)
-    {
-        if (selectedFigure == null)
-        {
-            return;
-        }
-        int x = e.getX();
-        int y = e.getY();
-
-        int incX = x - lastX;
-        int incY = y - lastY;
-
-        lastX = x;
-        lastY = y;
-
-        selectedFigure.incLocation(incX, incY);
-        canvas.repaint();
-
-    }
-    });
-
-    frame.getLoadSamples().addActionListener(new ActionListener()
-    {
-    @Override
-    public void actionPerformed(ActionEvent evt)
-    {
-        List<Figure> samples = Helpers.getSampleFigureList();
-        figureList.clear();
-
-        listModel.removeAllElements();
-        for (Figure figure : figureList)
-        {
-            listModel.addElement(figure);
-        }
-        canvas.repaint();
-        Canvas.updateTop();
-        if (Canvas.getTopFigure() != null)
-        {
-            frame.getScaleSpinner().setValue(Canvas.getTopFigure().getScale());
-        }
-
-        for (Figure sample : samples)
-        {
-            figureList.add(sample);
-        }
-        Canvas.updateTop();
-        if (Canvas.getTopFigure() != null)
-        {
-            frame.getScaleSpinner().setValue(Canvas.getTopFigure().getScale());
-        }
-
-        for (Figure sample : samples)
-        {
-            figureList.add(sample);
-        }
-    }
-    });
-
-    // Invoke the addRect dialog
-    frame.getAddRectDialog().addActionListener(new ActionListener()
-    {
-    @Override
-    public void actionPerformed(ActionEvent evt)
-    {
-        addRectDialog.setLocationRelativeTo(null);
-        addRectDialog.setTitle("Add a RectangleFigure");
-
-        addRectDialog.getHeightField().setText("" + 100);
-        addRectDialog.getWidthField().setText("" + 200);
-        addRectDialog.getStrokeWidthField().setText("" + 1);
-        addRectDialog.getTitleField().setText("");
-
-        addRectDialog.getLineColorField().setEditable(false);
-        addRectDialog.getFillColorField().setEditable(false);
-
-        addRectDialog.getLineColorField().setBackground(Color.black);
-        addRectDialog.getFillColorField().setBackground(Color.white);
-
-        addRectDialog.setVisible(true);
-    }
-    });
-
-    // addRectDialog needs the remaining arguments to do its work in events
-    Helpers.addEventHandlers(addRectDialog, figureList, listModel, frame, canvas);
-
-    frame.getAddCircleDialog().addActionListener(new ActionListener()
-    {
-    @Override
-    public void actionPerformed(ActionEvent e)
-    {
-        addCircDialog.setLocationRelativeTo(null);
-        addCircDialog.setTitle("Add a CircleFigure");
-
-        addCircDialog.getDiamterField().setText("" + 100);
-        addCircDialog.getStrokeWidthField().setText("" + 1);
-        addCircDialog.getTitleField().setText("");
-
-        addCircDialog.getLineColorField().setEditable(false);
-        addCircDialog.getFillColorField().setEditable(false);
-
-        addCircDialog.getLineColorField().setBackground(Color.black);
-        addCircDialog.getFillColorField().setBackground(Color.white);
-
-        addCircDialog.setVisible(true);
-    }
-    });
-
-    Helpers.addEventHandlers(addCircDialog, figureList, listModel, frame, canvas);
-
-    frame.getSave().addActionListener(new ActionListener()
-    {
-    @Override
-    public void actionPerformed(ActionEvent e)
-    {
-        if (figureList.size() <= 0)
-        {
-            JOptionPane.showMessageDialog(null, "You can't save an empty list");
-            return;
-        }
-
-        try
-        {
-            JFileChooser chooser = Controller.getFileChooser();
-            int status = chooser.showSaveDialog(frame);
-            if (status != JFileChooser.APPROVE_OPTION)
-            {
-                return;
-            }
-
-            File file0 = chooser.getSelectedFile();
-            File file = new File(correctedName("" + file0.toPath()));
-
-            FileOutputStream fos = new FileOutputStream(file);
-            ObjectOutputStream oos = new ObjectOutputStream(fos);
-
-            oos.writeObject(figureList);
-
-        }
-        catch (IOException ex)
-        {
-            JOptionPane.showMessageDialog(null, "File Error");
-        }
-
-    }
-    });
-
-    frame.getLoad().addActionListener(new ActionListener()
-    {
-    @Override
-    public void actionPerformed(ActionEvent e)
-    {
-
-        JFileChooser chooser = Controller.getFileChooser();
-        int status = chooser.showSaveDialog(frame);
-        if (status != JFileChooser.APPROVE_OPTION)
-        {
-            return;
-        }
-
-        File file = chooser.getSelectedFile();
-
-        try
-        {
-            FileInputStream fos = new FileInputStream(file);
-            ObjectInputStream oos = new ObjectInputStream(fos);
-
-            List<Figure> fileList = (List<Figure>) oos.readObject();
-
-            figureList.clear();
-            listModel.clear();
-
-            for (Figure f : fileList)
-            {
-                figureList.add(f);
-                listModel.addElement(f);
-            }
-
-            canvas.repaint();
-            Canvas.updateTop();
-
-            if (Canvas.getTopFigure() != null)
-            {
                 frame.getScaleSpinner().setValue(Canvas.getTopFigure().getScale());
             }
+        });
 
-        }
-        catch (IOException ex)
+        canvas.addMouseListener(new MouseAdapter()
         {
-            JOptionPane.showMessageDialog(null, "File Error");
-        }
-        catch (ClassNotFoundException ex)
+            @Override
+            public void mousePressed(MouseEvent e)
+            {
+                Canvas.updateTop();
+
+                if (Canvas.getTopFigure() == null)
+                {
+                    return;
+                }
+
+                int mouseX = e.getX();
+                int mouseY = e.getY();
+
+                if (Canvas.getTopFigure().getPositionShape().contains(mouseX, mouseY))
+                {
+                    selectedFigure = Canvas.getTopFigure();
+                }
+
+                lastX = mouseX;
+                lastY = mouseY;
+
+            }
+
+            public void mouseReleased(MouseEvent e)
+            {
+                Canvas.updateTop();
+                selectedFigure = null;
+            }
+        });
+
+        canvas.addMouseMotionListener(new MouseMotionAdapter()
         {
-            JOptionPane.showMessageDialog(null, "Class Error");
-        }
+            @Override
+            public void mouseDragged(MouseEvent e)
+            {
+                if (selectedFigure == null)
+                {
+                    return;
+                }
+                int x = e.getX();
+                int y = e.getY();
+
+                int incX = x - lastX;
+                int incY = y - lastY;
+
+                lastX = x;
+                lastY = y;
+
+                selectedFigure.incLocation(incX, incY);
+                canvas.repaint();
+
+            }
+        });
+
+        frame.getLoadSamples().addActionListener(new ActionListener()
+        {
+            @Override
+            public void actionPerformed(ActionEvent evt)
+            {
+                List<Figure> samples = Helpers.getSampleFigureList();
+                figureList.clear();
+
+                listModel.removeAllElements();
+                for (Figure figure : figureList)
+                {
+                    listModel.addElement(figure);
+                }
+                canvas.repaint();
+                Canvas.updateTop();
+                if (Canvas.getTopFigure() != null)
+                {
+                    frame.getScaleSpinner().setValue(Canvas.getTopFigure().getScale());
+                }
+
+                for (Figure sample : samples)
+                {
+                    figureList.add(sample);
+                }
+                Canvas.updateTop();
+                if (Canvas.getTopFigure() != null)
+                {
+                    frame.getScaleSpinner().setValue(Canvas.getTopFigure().getScale());
+                }
+
+                for (Figure sample : samples)
+                {
+                    figureList.add(sample);
+                }
+            }
+        });
+
+        // Invoke the addRect dialog
+        frame.getAddRectDialog().addActionListener(new ActionListener()
+        {
+            @Override
+            public void actionPerformed(ActionEvent evt)
+            {
+                addRectDialog.setLocationRelativeTo(null);
+                addRectDialog.setTitle("Add a RectangleFigure");
+
+                addRectDialog.getHeightField().setText("" + 100);
+                addRectDialog.getWidthField().setText("" + 200);
+                addRectDialog.getStrokeWidthField().setText("" + 1);
+                addRectDialog.getTitleField().setText("");
+
+                addRectDialog.getLineColorField().setEditable(false);
+                addRectDialog.getFillColorField().setEditable(false);
+
+                addRectDialog.getLineColorField().setBackground(Color.black);
+                addRectDialog.getFillColorField().setBackground(Color.white);
+
+                addRectDialog.setVisible(true);
+
+                Canvas.updateTop();
+                if (Canvas.getTopFigure() != null)
+                {
+                    frame.getScaleSpinner().setValue(Canvas.getTopFigure().getScale());
+                }
+            }
+        });
+
+        // addRectDialog needs the remaining arguments to do its work in events
+        Helpers.addEventHandlers(addRectDialog, figureList, listModel, frame, canvas);
+
+        frame.getAddCircleDialog().addActionListener(new ActionListener()
+        {
+            @Override
+            public void actionPerformed(ActionEvent e)
+            {
+                addCircDialog.setLocationRelativeTo(null);
+                addCircDialog.setTitle("Add a CircleFigure");
+
+                addCircDialog.getDiamterField().setText("" + 100);
+                addCircDialog.getStrokeWidthField().setText("" + 1);
+                addCircDialog.getTitleField().setText("");
+
+                addCircDialog.getLineColorField().setEditable(false);
+                addCircDialog.getFillColorField().setEditable(false);
+
+                addCircDialog.getLineColorField().setBackground(Color.black);
+                addCircDialog.getFillColorField().setBackground(Color.white);
+
+                addCircDialog.setVisible(true);
+
+                Canvas.updateTop();
+                if (Canvas.getTopFigure() != null)
+                {
+                    frame.getScaleSpinner().setValue(Canvas.getTopFigure().getScale());
+                }
+            }
+        });
+
+        Helpers.addEventHandlers(addCircDialog, figureList, listModel, frame, canvas);
+
+        frame.getSave().addActionListener(new ActionListener()
+        {
+            @Override
+            public void actionPerformed(ActionEvent e)
+            {
+                if (figureList.size() <= 0)
+                {
+                    JOptionPane.showMessageDialog(null, "You can't save an empty list");
+                    return;
+                }
+
+                try
+                {
+                    JFileChooser chooser = Controller.getFileChooser();
+                    int status = chooser.showSaveDialog(frame);
+                    if (status != JFileChooser.APPROVE_OPTION)
+                    {
+                        return;
+                    }
+
+                    File file0 = chooser.getSelectedFile();
+                    File file = new File(correctedName("" + file0.toPath()));
+
+                    FileOutputStream fos = new FileOutputStream(file);
+                    ObjectOutputStream oos = new ObjectOutputStream(fos);
+
+                    oos.writeObject(figureList);
+
+                }
+                catch (IOException ex)
+                {
+                    JOptionPane.showMessageDialog(null, "File Error");
+                }
+
+            }
+        });
+
+        frame.getLoad().addActionListener(new ActionListener()
+        {
+            @Override
+            public void actionPerformed(ActionEvent e)
+            {
+
+                JFileChooser chooser = Controller.getFileChooser();
+                int status = chooser.showSaveDialog(frame);
+                if (status != JFileChooser.APPROVE_OPTION)
+                {
+                    return;
+                }
+
+                File file = chooser.getSelectedFile();
+
+                try
+                {
+                    FileInputStream fos = new FileInputStream(file);
+                    ObjectInputStream oos = new ObjectInputStream(fos);
+
+                    List<Figure> fileList = (List<Figure>) oos.readObject();
+
+                    figureList.clear();
+                    listModel.clear();
+
+                    for (Figure f : fileList)
+                    {
+                        figureList.add(f);
+                        listModel.addElement(f);
+                    }
+
+                    canvas.repaint();
+                    Canvas.updateTop();
+
+                    if (Canvas.getTopFigure() != null)
+                    {
+                        frame.getScaleSpinner().setValue(Canvas.getTopFigure().getScale());
+                    }
+
+                }
+                catch (IOException ex)
+                {
+                    JOptionPane.showMessageDialog(null, "File Error");
+                }
+                catch (ClassNotFoundException ex)
+                {
+                    JOptionPane.showMessageDialog(null, "Class Error");
+                }
+            }
+        });
     }
-    });
-}
 
-public static void main(String[] args)
-{
-    Controller app = new Controller();
-    app.frame.setVisible(true);
-}
+    public static void main(String[] args)
+    {
+        Controller app = new Controller();
+        app.frame.setVisible(true);
+    }
 }
