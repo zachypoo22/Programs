@@ -1,7 +1,7 @@
 import sys
 import sqlite3
 from PyQt5.QtWidgets import QApplication, QWidget, QVBoxLayout, QLineEdit,\
-    QTextEdit, QPushButton, QLabel, QHBoxLayout, QInputDialog
+    QTextEdit, QPushButton, QLabel, QHBoxLayout, QInputDialog, QMessageBox
 
 
 #setup DataBase
@@ -72,8 +72,11 @@ class Window(QWidget):
 
 
     def add(self):
-        cTup = (self.classText.text(), int(self.creditsText.text()), float(self.gradeText.text()))
-        self.insertDB(cTup)
+        try:
+            cTup = (self.classText.text(), int(self.creditsText.text()), float(self.gradeText.text()))
+            self.insertDB(cTup)
+        except Exception as e:
+            QMessageBox.about(self, 'Error', 'Make sure Credits and Grade are both numbers')
 
         #calc new GPA and update text area
         self.calcGPA()
@@ -89,7 +92,7 @@ class Window(QWidget):
 
         #calc new GPA and update text area
 
-        self.calcGPA
+        self.calcGPA()
         self.updateText()
 
     def calcGPA(self):
