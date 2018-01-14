@@ -1,3 +1,7 @@
+/**
+ *
+ * @author Zacheriah Mell
+ */
 package views;
 
 import javax.swing.JButton;

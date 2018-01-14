@@ -4,6 +4,7 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/New/.idea/New.iml" filepath="$PROJECT_DIR$/New/.idea/New.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/PycharmProjects.iml" filepath="$PROJECT_DIR$/.idea/PycharmProjects.iml" />
+      <module fileurl="file://$PROJECT_DIR$/tk/.idea/tk.iml" filepath="$PROJECT_DIR$/tk/.idea/tk.iml" />
     </modules>
   </component>
 </project>
