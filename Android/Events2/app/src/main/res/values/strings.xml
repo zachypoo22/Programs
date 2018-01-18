@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Events2</string>
+    <string name="textValue">Change Me!</string>
+    <string name="buttonText">GO!</string>
 </resources>
