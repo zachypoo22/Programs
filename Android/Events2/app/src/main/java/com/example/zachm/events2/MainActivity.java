@@ -14,13 +14,21 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         Button goButton = (Button) findViewById(R.id.goButton);
-        goButton.setOnClickListener(
-                new Button.OnClickListener(){
+        goButton.setOnClickListener( new Button.OnClickListener(){
+                    @Override
                     public void onClick(View v) {
                         TextView textView = (TextView) findViewById(R.id.textField);
                         textView.setText("Good job!");
                     }
                 }
         );
+        goButton.setOnLongClickListener( new Button.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                TextView textView = (TextView) findViewById(R.id.textField);
+                textView.setText("good touch or bad touch?");
+                return true;
+            }
+        });
     }
 }
