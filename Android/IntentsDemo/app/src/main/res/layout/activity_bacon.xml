@@ -4,41 +4,31 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.zachm.intentsdemo.FirstActivity">
+    tools:context="com.example.zachm.intentsdemo.BaconActivity">
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#009900">
+        android:background="#72231F">
 
         <TextView
-            android:id="@+id/applesText"
+            android:id="@+id/baconText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="29dp"
-            android:text="Apples"
+            android:layout_marginTop="52dp"
+            android:text="Bacon"
             android:textAppearance="@style/TextAppearance.AppCompat.Large" />
 
         <Button
-            android:id="@+id/applesbutton"
+            android:id="@+id/baconButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/applesText"
+            android:layout_below="@+id/baconText"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="94dp"
+            android:layout_marginTop="93dp"
             android:text="Change!"
-            android:onClick="onClick"/>
-
-        <EditText
-            android:id="@+id/firstInput"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/applesText"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="23dp"
-            android:ems="10"
-            android:inputType="textPersonName" />
+            android:onClick="change"/>
     </RelativeLayout>
 </android.support.constraint.ConstraintLayout>
